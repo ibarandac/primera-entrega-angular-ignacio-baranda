@@ -1,21 +1,15 @@
   <!--CONTENEDOR-->
 <mat-drawer-container class="example-container" autosize>
       <!--SIDDEBAR FIN-->
-    <mat-drawer #drawer class="example-sidenav" mode="side">
-      <p>Auto-resizing sidenav</p>
-      @if (showFiller) {
-        <p>Aqui irá un listado de cursos.</p>
-      }
-      <button (click)="showFiller = !showFiller" mat-raised-button>
-        Cursos
-      </button>
-    </mat-drawer>
+    <mat-drawer [opened]="true" #drawer class="example-sidenav" mode="side">
+      <app-nav-menu />
+    </mat-drawer> 
   <!--SIDDEBAR FIN-->
   <!--CONTENIDO-->
     <div class="example-sidenav-content">
       <app-toolbar (drawerToggle)="drawer.toggle()" />
       <main style="padding: 1rem">
-        <app-students />
+        <router-outlet />
       </main>
     </div>
   <!--CONTENIDO-->

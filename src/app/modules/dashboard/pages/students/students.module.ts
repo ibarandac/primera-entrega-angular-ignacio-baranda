@@ -15,6 +15,7 @@ import { SharedModule } from '../../../../shared/shared.module';
 import { StudentDialogFormComponent } from './components/student-dialog-form/student-dialog-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatCardModule} from '@angular/material/card';
+import { StudentDetailComponent } from './pages/student-detail/student-detail.component';
 
 
 
@@ -23,7 +24,8 @@ import {MatCardModule} from '@angular/material/card';
 @NgModule({
   declarations: [
     StudentsComponent,
-    StudentDialogFormComponent
+    StudentDialogFormComponent,
+    StudentDetailComponent
   ],
   imports: [
     CommonModule,

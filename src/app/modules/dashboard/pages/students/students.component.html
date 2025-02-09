@@ -1,3 +1,15 @@
+@if (isLoading) {
+  <p>
+    Por favor, espere...
+  </p>
+} @else {
+
+  @if (hasError) {
+    <p>
+      Ocurrio un error, vuelve a intentarlo
+    </p>
+  } @else {
+
 <mat-card appearance="outlined" >
   <mat-card-content>
     <mat-card-header>
@@ -51,11 +63,24 @@
             <button (click)="onEdit(element)" mat-icon-button>
                 <mat-icon>edit</mat-icon>
             </button>
+            <button [routerLink]="element.id"
+            [queryParams]="{
+              name: element.name,
+              lastName: element.lastName,
+              country: element.country
+            }"
+            mat-icon-button>
+              <mat-icon>visibility</mat-icon>
+          </button>
         </td>
       </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
+  
 </mat-card-content>
 </mat-card>
+}
+}
