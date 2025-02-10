@@ -12,6 +12,7 @@ import { StudentsModule  } from './pages/students/students.module';
 import {MatCardModule} from '@angular/material/card';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { SharedModule } from '../../shared/shared.module';
+import { TeachersModule } from './pages/teachers/teachers.module';
 
 
 
@@ -31,6 +32,7 @@ import { SharedModule } from '../../shared/shared.module';
     StudentsModule,
     MatCardModule,
     SharedModule,
+    TeachersModule,
     
   ],
   exports: [DashboardComponent],
