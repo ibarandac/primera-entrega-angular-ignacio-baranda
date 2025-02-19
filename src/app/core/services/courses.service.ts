@@ -1,52 +1,40 @@
 import { Injectable } from "@angular/core";
-import { Observable, delay, of } from "rxjs";
+import { Observable, concatMap} from "rxjs";
 import { Course } from "../../modules/dashboard/pages/courses/models";
-import { generateRandomString } from "../../shared/utils";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from "../../../environments/environment.development";
 
-let MY_FAKE_DATABASE: Course[] = [
-    {
-        id: generateRandomString(6),
-        name: "Javascript",
-        credits: 150,
-        duration: "6 months"
-    },
-    {
-        id: generateRandomString(6),
-        name: "Angular",
-        credits: 300,
-        duration: "12 months"
-    },
-    {
-        id: generateRandomString(6),
-        name: "RxJS",
-        credits: 200,
-        duration: "9 months"
-    }
-];
+
 @Injectable ({ providedIn: 'root'})
 export class CourseService {
+    constructor(private httpClient: HttpClient) {}
+
+    getCourseDetail (id: string): Observable<Course> {
+        return this.httpClient.get<Course>(`${environment.baseApiUrl}/courses/${id}?_embed=teachers`)
+    }
+
     updateCourseById(id: string, data: { name: string, credits:number, duration:string }): Observable<Course[]> {
-        MY_FAKE_DATABASE = MY_FAKE_DATABASE.map((course) =>
-          course.id === id ? { ...course, ...data } : course
-        );
-        return this.getCourses();
+        return this.httpClient.patch<Course>(`${environment.baseApiUrl}/courses/${id}`, data)
+        .pipe(concatMap(() => this.getCourses()));
       }
 
     addCourse(payload: { name:string, credits:number, duration:string }): Observable<Course[]>{
 
-        MY_FAKE_DATABASE.push({
-            ...payload,
-            id: generateRandomString(6),
-        });
-
-        return this.getCourses();
+        return this.httpClient
+        .post<Course>(`${environment.baseApiUrl}/courses`, payload)
+        .pipe(concatMap(() => this.getCourses()));
     }
     getCourses(): Observable<Course[]> {
-        return of([...MY_FAKE_DATABASE]) .pipe(delay(1000));
+
+        const myHeaders = new HttpHeaders().append('Authorization', localStorage.getItem('access_token') || '' )
+        return this.httpClient.get<Course[]>(`${environment.baseApiUrl}/courses`, {
+            headers: myHeaders,
+        });
     }
 
     deleteCourseById(id: string): Observable<Course[]> {
-        MY_FAKE_DATABASE = MY_FAKE_DATABASE.filter((course) => course.id != id);
-        return this.getCourses();
+        return (this.httpClient.delete(`${environment.baseApiUrl}/courses/${id}`)
+        .pipe(concatMap(() => this.getCourses()))
+        );
     }
 }

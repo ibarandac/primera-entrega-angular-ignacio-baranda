@@ -4,7 +4,7 @@
     <mat-spinner />
 } @else {
 
-    <button (click)="openFormDialog()" mat-flat-button>
+    <button *ngIf="isAdmin$ | async" (click)="openFormDialog()" mat-flat-button>
         Crear curso
     </button>
     <app-courses-table [dataSource] = "dataSource" (delete)="onDelete($event)" (edit)="openFormDialog($event)"/>

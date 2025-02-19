@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
+import { authGuard } from '../../core/guards/auth.guard';
+import { adminGuard } from '../../core/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -18,7 +20,13 @@ const routes: Routes = [
   {
     path: 'courses',
     loadChildren: () => import('./pages/courses/courses.module').then ((m) => m.CoursesModule),
-  }
+  },
+  {
+    path: 'users',
+    canActivate: [adminGuard],
+    loadChildren: () => import('./pages/users/users.module').then ((m) => m.UsersModule),
+  },
+  
 ];
 
 @NgModule({

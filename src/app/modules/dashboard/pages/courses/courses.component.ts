@@ -4,6 +4,7 @@ import { Course } from './models';
 import { MatDialog } from '@angular/material/dialog';
 import { CourseFormDialogComponent } from './components/course-form-dialog/course-form-dialog.component';
 import { Observable } from 'rxjs';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-courses',
@@ -17,7 +18,10 @@ export class CoursesComponent implements OnInit {
 
   dataSource: Course[] = [];
 
-  constructor(private courseService: CourseService, private matDialog: MatDialog) {}
+  isAdmin$: Observable<boolean>;
+  constructor(private courseService: CourseService, private matDialog: MatDialog, private authService: AuthService) {
+    this.isAdmin$ = this.authService.isAdmin$;
+  }
   
   handleCoursesUpdate(data: Course[]): void {
     this.dataSource = [...data];

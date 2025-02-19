@@ -6,7 +6,7 @@ import { TeacherDetailComponent } from './pages/teacher-detail/teacher-detail.co
 const routes: Routes = [
   {
     path: "",
-    component: TeachersComponent
+    component: TeachersComponent,
   },
   {
     path: ':id',

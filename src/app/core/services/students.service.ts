@@ -62,7 +62,7 @@ export class StudentsService {
                 subscriber.next(students);
         
                 
-                if (students.length === 7) {
+                if (students.length === 4) {
                   subscriber.complete(); 
                 }
               }, 1000);

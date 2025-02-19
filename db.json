@@ -1,0 +1,72 @@
+{
+  "users": [
+    {
+      "id": "vnD3s",
+      "email": "admin@email.com",
+      "password": "123456",
+      "name": "Administrador",
+      "accessToken": "accsstknadmin",
+      "role": "ADMIN"
+    },
+    {
+      "id": "avs3D",
+      "email": "employee@email.com",
+      "password": "123456",
+      "name": "Empleado",
+      "accessToken": "accsstknemply",
+      "role": "EMPLOYEE"
+    }
+  ],
+  "courses": [
+    {
+      "id": "avs3D",
+      "name": "Javascript",
+      "credits": 150,
+      "duration": "6 months"
+    },
+    {
+      "id": "sdjv4",
+      "name": "Angular",
+      "credits": 300,
+      "duration": "12 months"
+    },
+    {
+      "id": "sMgd3",
+      "name": "RxJS",
+      "credits": 200,
+      "duration": "9 months"
+    },
+    {
+      "id": "2ee8",
+      "name": "After Effects",
+      "credits": "250",
+      "duration": "10 months"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "avs5D",
+      "name": "Lorena",
+      "lastName": "Cornejo",
+      "age": 65,
+      "course": "Angular",
+      "courseId": "sdjv4"
+    },
+    {
+      "id": "sdjv8",
+      "name": "Ignacio",
+      "lastName": "Rivera",
+      "age": 35,
+      "course": "RxJS",
+      "courseId": "sMgd3"
+    },
+    {
+      "id": "sdjv1",
+      "name": "Kimberly",
+      "lastName": "Abad",
+      "age": 29,
+      "course": "Javascript",
+      "courseId": "avs3D"
+    }
+  ]
+}

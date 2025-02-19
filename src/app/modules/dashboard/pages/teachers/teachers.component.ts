@@ -1,11 +1,10 @@
-import { Component,OnDestroy , OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { TeacherService } from '../../../../core/services/teachers.service';
 import { Teacher } from './models';
-import { generateRandomString } from '../../../../shared/utils';
 import { MatDialog } from '@angular/material/dialog';
-import { TeacherDialogFormComponent } from './components/teacher-dialog-form/teacher-dialog-form.component';
-import { TeachersService } from '../../../../core/services/teachers.service';
-import { take, Subscription, } from 'rxjs';
+import { TeacherFormDialogComponent } from './components/teacher-form-dialog/teacher-form-dialog.component';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-teachers',
@@ -14,122 +13,91 @@ import { take, Subscription, } from 'rxjs';
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.scss'
 })
-export class TeachersComponent implements OnInit, OnDestroy{
-
-  
-  displayedColumns: string[] = ['id', 'name', 'age', 'country', 'actions'];
-  // teachers: Teacher[] = [
-  //   {
-  //     id: generateRandomString(6),
-  //     name: "Ignacio",
-  //     lastName: "Baranda",
-  //     age: 33,
-  //     country: "Chile",
-  //   }
-  // ];
-
-  editingTeacherId?: string | null = null;
-  teachers: Teacher[] = [];
-
+export class TeachersComponent implements OnInit {
   isLoading = false;
-  hasError = false;
 
-  teachersSubscription?: Subscription;
+  dataSource: Teacher[] = [];
+
+  isAdmin$: Observable<boolean>;
+  constructor(private teacherService: TeacherService, private matDialog: MatDialog, private authService: AuthService) {
+    this.isAdmin$ = this.authService.isAdmin$;
+  }
   
+  handleTeachersUpdate(data: Teacher[]): void {
+    this.dataSource = [...data];
+  }
 
-  constructor(private fb: FormBuilder, private matDialog: MatDialog, private teachersService: TeachersService ) {}
+  openFormDialog(editingTeacher?: Teacher): void {
+    if (editingTeacher) {
+      console.log('Se va a editar: ', editingTeacher);
+    }
+    this.matDialog
+      .open(TeacherFormDialogComponent, { data: { editingTeacher } })
+      // Cuando el dialogo se cierra...
+      .afterClosed()
+      .subscribe({
+        next: (data) => {
+          if (!!data) {
+            // CREAR O ACTUALIZAR CURSO
+            if (!!editingTeacher) {
+              // ACTUALIZAR
+              this.updateTeacher(editingTeacher.id, data);
+            } else {
+              // CREAR
+              this.addTeacher(data);
+            }
+          }
+        },
+      });
+  }
 
-  ngOnDestroy(): void {
-    // Este ciclo de vida se llama cuando el componente se destruye (sale de la vista);
-    this.teachersSubscription?.unsubscribe();
+  updateTeacher(id: string, data: { name: string, lastName: string, age: number, course: string, courseId: string }) {
+    this.isLoading = true;
+    this.teacherService.updateTeacherById(id, data).subscribe({
+      next: (data) => this.handleTeachersUpdate(data),
+      error: (err) => (this.isLoading = false),
+      complete: () => (this.isLoading = false),
+    });
+  }
+
+  addTeacher(data: { name: string, lastName: string, age: number, course: string, courseId: string }): void {
+    this.isLoading = true;
+    this.teacherService.addTeacher(data).subscribe({
+      next: (data) => this.handleTeachersUpdate(data),
+      error: (err) => (this.isLoading = false),
+      complete: () => (this.isLoading = false),
+    });
   }
 
   ngOnInit(): void {
-    // this.loadTeachersFromPromise()
-    this.loadTeacherFromObs();
-  }
-
-  loadTeacherFromObs(): void {
     this.isLoading = true;
-    this.teachersSubscription = this.teachersService
-    .getTeachersObservable()
-    .pipe(take(5))
-    .subscribe({
-      next: (teachers) => {
-        console.log('Recibimos datos: ', teachers);
-        this.teachers = [...teachers];
+    this.teacherService.getTeachers().subscribe({
+      next: (data) => {
+        this.handleTeachersUpdate(data);
+      },
+      error: () => {
         this.isLoading = false;
       },
-      error: (error) => {
-        alert(error);
-        this.hasError = true;
+      complete: () => {
         this.isLoading = false;
       },
     });
   }
-  loadTeachersFromPromise(): void {  
-  this.isLoading = true;
-    this.teachersService
-      .getTeachersPromise()
-      .then((teachers) => {
-      this.teachers = teachers;
-      this.hasError = false;
-    })
-    .catch((error) =>{
-      this.hasError = true;
-      console.error(error);
-    })
-    .finally(() => {
-      this.isLoading = false;
-    });
-  }
-  
-  onDelete(id: string) {
-    if (confirm("Estas seguro?"))
-    this.teachers = this.teachers.filter(teacher => teacher.id !== id);
-  }
 
-  
-
-  onEdit(teacher: Teacher): void {
-    this.editingTeacherId = teacher.id;
-
-    this.matDialog
-      .open(TeacherDialogFormComponent, {
-        data: teacher,
-      })
-      .afterClosed()
-      .subscribe({
-        next: (valorFormulario) => {
-          if (!!valorFormulario) {
-            // Logica de editar
-            this.teachers = this.teachers.map((teacher) =>
-            teacher.id === this.editingTeacherId
-                ? { ...teacher, ...valorFormulario }
-                : teacher
-            );
-            this.editingTeacherId = null;
-          }
+  onDelete(id: string): void {
+    if (confirm('Esta seguro?')) {
+      this.isLoading = true;
+      this.teacherService.deleteTeacherById(id).subscribe({
+        next: (data) => {
+          this.handleTeachersUpdate(data);
+        },
+        error: (err) => {
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
         },
       });
-  }
-
-  onCreateTeacher(): void {
-    this.matDialog
-      .open(TeacherDialogFormComponent)
-      .afterClosed()
-      .subscribe({
-        next: (valorFormulario) => {
-          if (!!valorFormulario) {
-            this.teachers = [
-              ...this.teachers,
-              {
-                id: generateRandomString(6),
-                ...valorFormulario,
-              },
-            ];
-          }
-        },
-      });
+    }
   }
 }
