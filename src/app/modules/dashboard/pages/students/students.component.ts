@@ -1,11 +1,10 @@
-import { Component,OnDestroy , OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { StudentService } from '../../../../core/services/students.service';
 import { Student } from './models';
-import { generateRandomString } from '../../../../shared/utils';
 import { MatDialog } from '@angular/material/dialog';
-import { StudentDialogFormComponent } from './components/student-dialog-form/student-dialog-form.component';
-import { StudentsService } from '../../../../core/services/students.service';
-import { take, Subscription, } from 'rxjs';
+import { StudentFormDialogComponent } from './components/student-form-dialog/student-form-dialog.component';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-students',
@@ -14,122 +13,91 @@ import { take, Subscription, } from 'rxjs';
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss'
 })
-export class StudentsComponent implements OnInit, OnDestroy{
-
-  
-  displayedColumns: string[] = ['id', 'name', 'age', 'country', 'actions'];
-  // students: Student[] = [
-  //   {
-  //     id: generateRandomString(6),
-  //     name: "Ignacio",
-  //     lastName: "Baranda",
-  //     age: 33,
-  //     country: "Chile",
-  //   }
-  // ];
-
-  editingStudentId?: string | null = null;
-  students: Student[] = [];
-
+export class StudentsComponent implements OnInit {
   isLoading = false;
-  hasError = false;
 
-  studentsSubscription?: Subscription;
+  dataSource: Student[] = [];
+
+  isAdmin$: Observable<boolean>;
+  constructor(private studentService: StudentService, private matDialog: MatDialog, private authService: AuthService) {
+    this.isAdmin$ = this.authService.isAdmin$;
+  }
   
+  handleStudentsUpdate(data: Student[]): void {
+    this.dataSource = [...data];
+  }
 
-  constructor(private fb: FormBuilder, private matDialog: MatDialog, private studentsService: StudentsService ) {}
+  openFormDialog(editingStudent?: Student): void {
+    if (editingStudent) {
+      console.log('Se va a editar: ', editingStudent);
+    }
+    this.matDialog
+      .open(StudentFormDialogComponent, { data: { editingStudent } })
+      // Cuando el dialogo se cierra...
+      .afterClosed()
+      .subscribe({
+        next: (data) => {
+          if (!!data) {
+            // CREAR O ACTUALIZAR CURSO
+            if (!!editingStudent) {
+              // ACTUALIZAR
+              this.updateStudent(editingStudent.id, data);
+            } else {
+              // CREAR
+              this.addStudent(data);
+            }
+          }
+        },
+      });
+  }
 
-  ngOnDestroy(): void {
-    // Este ciclo de vida se llama cuando el componente se destruye (sale de la vista);
-    this.studentsSubscription?.unsubscribe();
+  updateStudent(id: string, data: { name: string, lastName: string, age: number, course: string, courseId: string }) {
+    this.isLoading = true;
+    this.studentService.updateStudentById(id, data).subscribe({
+      next: (data) => this.handleStudentsUpdate(data),
+      error: (err) => (this.isLoading = false),
+      complete: () => (this.isLoading = false),
+    });
+  }
+
+  addStudent(data: { name: string, lastName: string, age: number, course: string, courseId: string }): void {
+    this.isLoading = true;
+    this.studentService.addStudent(data).subscribe({
+      next: (data) => this.handleStudentsUpdate(data),
+      error: (err) => (this.isLoading = false),
+      complete: () => (this.isLoading = false),
+    });
   }
 
   ngOnInit(): void {
-    // this.loadStudentsFromPromise()
-    this.loadStudentFromObs();
-  }
-
-  loadStudentFromObs(): void {
     this.isLoading = true;
-    this.studentsSubscription = this.studentsService
-    .getStudentsObservable()
-    .pipe(take(5))
-    .subscribe({
-      next: (students) => {
-        console.log('Recibimos datos: ', students);
-        this.students = [...students];
+    this.studentService.getStudents().subscribe({
+      next: (data) => {
+        this.handleStudentsUpdate(data);
+      },
+      error: () => {
         this.isLoading = false;
       },
-      error: (error) => {
-        alert(error);
-        this.hasError = true;
+      complete: () => {
         this.isLoading = false;
       },
     });
   }
-  loadStudentsFromPromise(): void {  
-  this.isLoading = true;
-    this.studentsService
-      .getStudentsPromise()
-      .then((students) => {
-      this.students = students;
-      this.hasError = false;
-    })
-    .catch((error) =>{
-      this.hasError = true;
-      console.error(error);
-    })
-    .finally(() => {
-      this.isLoading = false;
-    });
-  }
-  
-  onDelete(id: string) {
-    if (confirm("Estas seguro?"))
-    this.students = this.students.filter(student => student.id !== id);
-  }
 
-  
-
-  onEdit(student: Student): void {
-    this.editingStudentId = student.id;
-
-    this.matDialog
-      .open(StudentDialogFormComponent, {
-        data: student,
-      })
-      .afterClosed()
-      .subscribe({
-        next: (valorFormulario) => {
-          if (!!valorFormulario) {
-            // Logica de editar
-            this.students = this.students.map((student) =>
-              student.id === this.editingStudentId
-                ? { ...student, ...valorFormulario }
-                : student
-            );
-            this.editingStudentId = null;
-          }
+  onDelete(id: string): void {
+    if (confirm('Esta seguro?')) {
+      this.isLoading = true;
+      this.studentService.deleteStudentById(id).subscribe({
+        next: (data) => {
+          this.handleStudentsUpdate(data);
+        },
+        error: (err) => {
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
         },
       });
-  }
-
-  onCreateStudent(): void {
-    this.matDialog
-      .open(StudentDialogFormComponent)
-      .afterClosed()
-      .subscribe({
-        next: (valorFormulario) => {
-          if (!!valorFormulario) {
-            this.students = [
-              ...this.students,
-              {
-                id: generateRandomString(6),
-                ...valorFormulario,
-              },
-            ];
-          }
-        },
-      });
+    }
   }
 }

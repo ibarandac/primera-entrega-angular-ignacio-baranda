@@ -52,9 +52,7 @@
           },
           "configurations": {
             "production": {
-              "budgets": [
-                
-              ],
+              "budgets": [],
               "outputHashing": "all"
             },
             "development": {
@@ -112,6 +110,9 @@
     }
   },
   "cli": {
-    "analytics": "47f714b4-9f04-49ed-877d-f57d071c09cc"
+    "analytics": "47f714b4-9f04-49ed-877d-f57d071c09cc",
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
   }
 }

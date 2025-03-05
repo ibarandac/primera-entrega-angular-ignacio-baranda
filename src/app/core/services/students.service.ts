@@ -1,75 +1,40 @@
 import { Injectable } from "@angular/core";
+import { Observable, concatMap} from "rxjs";
 import { Student } from "../../modules/dashboard/pages/students/models";
-import { generateRandomString } from "../../shared/utils";
-import { Observable, interval } from "rxjs";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from "../../../environments/environment.development";
 
-@Injectable({ providedIn: 'root' })
-export class StudentsService {
 
-    getStudentsPromise(): Promise<Student[]>{
-        return new Promise((resolve, reject) =>{
-            reject("Error de conexión");
+@Injectable ({ providedIn: 'root'})
+export class StudentService {
+    constructor(private httpClient: HttpClient) {}
 
-            setTimeout(() => {
-                resolve([
-                    {
-                        id: generateRandomString(6),
-                        name: 'Manuel',
-                        lastName: 'Baranda',
-                        age: 35,
-                        country: 'Chile'
-                    },
-                ]);
-            }, 3000);
+    getStudentDetail (id: string): Observable<Student> {
+        return this.httpClient.get<Student>(`${environment.baseApiUrl}/students/${id}`)
+    }
+
+    updateStudentById(id: string, data: { name: string, lastName: string, age:number, course:string }): Observable<Student[]> {
+        return this.httpClient.patch<Student>(`${environment.baseApiUrl}/students/${id}`, data)
+        .pipe(concatMap(() => this.getStudents()));
+      }
+
+    addStudent(payload: { name: string, lastName: string, age:number, course:string  }): Observable<Student[]>{
+
+        return this.httpClient
+        .post<Student>(`${environment.baseApiUrl}/students`, payload)
+        .pipe(concatMap(() => this.getStudents()));
+    }
+    getStudents(): Observable<Student[]> {
+
+        const myHeaders = new HttpHeaders().append('Authorization', localStorage.getItem('access_token') || '' )
+        return this.httpClient.get<Student[]>(`${environment.baseApiUrl}/students`, {
+            headers: myHeaders,
         });
     }
 
-    getStudentsObservable (): Observable<Student[]> {
-        return new Observable <Student[]>((subscriber) => {
-            const students = [
-                {
-                    id: generateRandomString(6),
-                    name: 'Manuel',
-                    lastName: 'Baranda',
-                    age: 35,
-                    country: 'Chile'
-                },
-                {
-                  id: generateRandomString(6),
-                  name: 'Lukas',
-                  lastName: 'Walker',
-                  age: 32,
-                  country: 'Chile'
-              },
-              {
-                id: generateRandomString(6),
-                name: 'Gabriel',
-                lastName: 'Olivares',
-                age: 32,
-                country: 'Chile'
-            },
-            ];
-            setInterval(() => {
-                students.push({
-                  id: generateRandomString(6),
-                  name: 'NUEVO',
-                  lastName: 'ESTUDIENTE ' + students.length,
-                  age: 20,
-                  country: 'País',
-                });
-        
-                
-                subscriber.next(students);
-        
-                
-                if (students.length === 4) {
-                  subscriber.complete(); 
-                }
-              }, 1000);
-            });
-          }
-        
-          getInterval(): Observable<number> {
-            return interval(1000);
-          }
-        }
+    deleteStudentById(id: string): Observable<Student[]> {
+        return (this.httpClient.delete(`${environment.baseApiUrl}/students/${id}`)
+        .pipe(concatMap(() => this.getStudents()))
+        );
+    }
+}

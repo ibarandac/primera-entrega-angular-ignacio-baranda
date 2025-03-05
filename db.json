@@ -15,6 +15,73 @@
       "name": "Empleado",
       "accessToken": "accsstknemply",
       "role": "EMPLOYEE"
+    },
+    {
+      "id": "fdvv3c",
+      "email": "student4@email.com",
+      "password": "123456",
+      "name": "Estudiante",
+      "accessToken": "accsstknstdnt",
+      "role": "STUDENT"
+    },
+    {
+      "id": "K2reH8",
+      "email": "gabriel.olivares@email.com",
+      "password": "123456",
+      "name": "Gabriel",
+      "lastName": "Olivares",
+      "country": "Chile",
+      "accessToken": "accsstknstdnt",
+      "role": "STUDENT"
+    }
+  ],
+  "students": [
+    {
+      "id": "K2reH8",
+      "email": "gabriel.olivares@email.com",
+      "password": "123456",
+      "name": "Gabriel",
+      "lastName": "Olivares",
+      "country": "Chile",
+      "age": 32,
+      "course": "Angular",
+      "courseId": "sdjv4",
+      "accessToken": "accsstknstdnt",
+      "role": "STUDENT"
+    },
+    {
+      "id": "4UgzCs",
+      "email": "lukas.walker@email.com",
+      "password": "123456",
+      "name": "Lukas",
+      "lastName": "Walker",
+      "country": "Chile",
+      "age": 23,
+      "course": "Angular",
+      "courseId": "sdjv4",
+      "accessToken": "accsstknstdnt",
+      "role": "STUDENT"
+    },
+    {
+      "id": "fdvv3c",
+      "email": "julian.abusleme@email.com",
+      "password": "123456",
+      "name": "Julian",
+      "lastName": "Abusleme",
+      "country": "Chile",
+      "age": 25,
+      "course": "Javascript",
+      "courseId": "sdjv4",
+      "accessToken": "accsstknstdnt",
+      "role": "STUDENT"
+    },
+    {
+      "id": "79cc",
+      "name": "Felipe",
+      "lastName": "Alvarez",
+      "age": "35",
+      "course": "Angular",
+      "courseId": "sdjv4"
     }
   ],
   "courses": [
@@ -67,6 +134,28 @@
       "age": 29,
       "course": "Javascript",
       "courseId": "avs3D"
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "adc33D",
+      "studentId": "fdvc",
+      "courseId": "svDFj3"
+    },
+    {
+      "id": "c801",
+      "studentId": "fdvc",
+      "courseId": "svDFs3"
+    },
+    {
+      "id": "ca5b",
+      "studentId": "4UgzCs",
+      "courseId": "2ee8"
+    },
+    {
+      "id": "fbd9",
+      "courseId": "leoT7T",
+      "studentId": "sjvfm8"
     }
   ]
 }

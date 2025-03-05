@@ -15,18 +15,30 @@
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
   
-    <!-- Credits Column -->
-    <ng-container matColumnDef="credits">
-      <th mat-header-cell *matHeaderCellDef> Créditos </th>
-      <td mat-cell *matCellDef="let element"> {{element.credits}} </td>
+    <!-- LastName Column -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef> Apellido </th>
+      <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
     </ng-container>
   
-    <!-- Duration Column -->
-    <ng-container matColumnDef="duration">
-      <th mat-header-cell *matHeaderCellDef> Duración </th>
-      <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+    <!-- Age Column -->
+    <ng-container matColumnDef="age">
+      <th mat-header-cell *matHeaderCellDef> Edad </th>
+      <td mat-cell *matCellDef="let element"> {{element.age}} </td>
     </ng-container>
-
+  
+    <!-- Course Column -->
+    <ng-container matColumnDef="course">
+      <th mat-header-cell *matHeaderCellDef> Curso </th>
+      <td mat-cell *matCellDef="let element"> {{element.course}} </td>
+    </ng-container>
+  
+    <!-- Course ID Column -->
+    <ng-container matColumnDef="courseId">
+      <th mat-header-cell *matHeaderCellDef> Curso ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.courseId}} </td>
+    </ng-container>
+  
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Acciones </th>
@@ -38,7 +50,7 @@
             <button *ngIf="isAdmin$ | async" (click)="edit.emit(element)" mat-icon-button>
                 <mat-icon>edit</mat-icon>
             </button>
-            <button [routerLink]="element.id" 
+            <button  
             mat-icon-button>
               <mat-icon>visibility</mat-icon>
           </button>

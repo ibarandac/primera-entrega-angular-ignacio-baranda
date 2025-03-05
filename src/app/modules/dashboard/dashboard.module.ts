@@ -8,11 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { StudentsModule  } from './pages/students/students.module';
 import {MatCardModule} from '@angular/material/card';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { SharedModule } from '../../shared/shared.module';
-import { UsersComponent } from './pages/users/users.component';
 
 
 
@@ -21,7 +19,6 @@ import { UsersComponent } from './pages/users/users.component';
     DashboardComponent,
     ToolbarComponent,
     NavMenuComponent,
-    UsersComponent,
   ],
   imports: [
     CommonModule,
@@ -30,7 +27,6 @@ import { UsersComponent } from './pages/users/users.component';
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
-    StudentsModule,
     MatCardModule,
     SharedModule,
     
