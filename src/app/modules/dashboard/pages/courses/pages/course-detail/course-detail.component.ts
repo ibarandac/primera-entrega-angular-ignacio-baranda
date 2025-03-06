@@ -52,6 +52,8 @@ export class CourseDetailComponent implements OnInit {
     }
 
     
+
+    
     onRemoveStudent(studentId: string) {
       this.coursesService.removeStudentFromCourse(this.courseId, studentId).subscribe(
         () => {
