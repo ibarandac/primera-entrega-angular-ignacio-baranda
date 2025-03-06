@@ -15,7 +15,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class CourseDetailComponent implements OnInit {
    
     isLoading = false;
+    courseId: string = '';
     course: Course | null = null;
+    students: any[] = [];
     
     errorMessage = '';
 
@@ -23,11 +25,13 @@ export class CourseDetailComponent implements OnInit {
 
     ngOnInit(): void {
       this.isLoading = true;
+      
       this.coursesService.getCourseDetail(
         this.activatedRoute.snapshot.params['id']
       ).subscribe ({
         next: (course) => {
           this.course = course;
+          this.students = course.students || [];
           this.errorMessage = '';
         },
         complete: () => {
@@ -41,7 +45,22 @@ export class CourseDetailComponent implements OnInit {
             }
           }
         },
+
+        
       });
+    }
+
+    
+    onRemoveStudent(studentId: string) {
+      this.coursesService.removeStudentFromCourse(this.courseId, studentId).subscribe(
+        () => {
+          // El estudiante ha sido eliminado, actualizamos la lista
+          this.students = this.students.filter(student => student.id !== studentId);
+        },
+        (error) => {
+          console.error('Error al desinscribir al estudiante', error);
+        }
+      );
     }
   }
 

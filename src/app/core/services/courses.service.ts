@@ -10,8 +10,13 @@ export class CourseService {
     constructor(private httpClient: HttpClient) {}
 
     getCourseDetail (id: string): Observable<Course> {
-        return this.httpClient.get<Course>(`${environment.baseApiUrl}/courses/${id}?_embed=teachers`)
+        return this.httpClient.get<Course>(`${environment.baseApiUrl}/courses/${id}?_embed=teachers&_embed=students`)
     }
+    
+    removeStudentFromCourse(courseId: string, studentId: string): Observable<void> {
+        return this.httpClient.delete<void>(`${environment.baseApiUrl}/courses/${courseId}/students/${studentId}`);
+      }
+    
 
     updateCourseById(id: string, data: { name: string, credits:number, duration:string }): Observable<Course[]> {
         return this.httpClient.patch<Course>(`${environment.baseApiUrl}/courses/${id}`, data)

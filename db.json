@@ -71,7 +71,7 @@
       "country": "Chile",
       "age": 25,
       "course": "Javascript",
-      "courseId": "sdjv4",
+      "courseId": "avs3D",
       "accessToken": "accsstknstdnt",
       "role": "STUDENT"
     },
@@ -139,23 +139,25 @@
   "enrollments": [
     {
       "id": "adc33D",
-      "studentId": "fdvc",
-      "courseId": "svDFj3"
+      "studentId": "fdvv3c",
+      "courseId": "avs3D",
+      "studentName": "Julian",
+      "courseName": "Javascript"
     },
     {
-      "id": "c801",
-      "studentId": "fdvc",
-      "courseId": "svDFs3"
-    },
-    {
-      "id": "ca5b",
+      "id": "8277",
       "studentId": "4UgzCs",
-      "courseId": "2ee8"
+      "courseId": "sdjv4"
     },
     {
-      "id": "fbd9",
-      "courseId": "leoT7T",
-      "studentId": "sjvfm8"
+      "id": "6030",
+      "studentId": "4UgzCs",
+      "courseId": "sdjv4"
+    },
+    {
+      "id": "f6da",
+      "studentId": "4UgzCs",
+      "courseId": "avs3D"
     }
   ]
 }

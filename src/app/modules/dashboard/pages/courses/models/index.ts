@@ -1,3 +1,4 @@
+import { Student } from "../../students/models";
 import { Teacher } from "../../teachers/models";
 
 export interface Course {
@@ -5,5 +6,6 @@ export interface Course {
     name: string;
     credits: number;
     duration: string;
-    teachers?: Teacher[]
+    teachers?: Teacher[],
+    students?: Student[],
 }
