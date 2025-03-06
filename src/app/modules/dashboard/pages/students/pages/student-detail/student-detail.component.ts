@@ -1,24 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Student } from '../../models';
+import { StudentService } from '../../../../../../core/services/students.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-student-detail',
   standalone: false,
   
   templateUrl: './student-detail.component.html',
-  styles: ``
+  styles: ``,
 })
-export class StudentDetailComponent {
-  studentId: string;
-  fullName: string;
+export class StudentDetailComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute) {
-    this.studentId = this.activatedRoute.snapshot.params['id'];
-    const name = this.activatedRoute.snapshot.queryParams['name'];
-    const lastName = this.activatedRoute.snapshot.queryParams['lastName'];
+  isLoading = false;
 
-    this.fullName = `${name} ${lastName}`;
+  student: Student | null = null;
+  studentId: string = '';
+
+  errorMessage = '';
+
+  constructor(private activatedRoute: ActivatedRoute, private studentsService: StudentService) {}
+  ngOnInit(): void {
+    this.isLoading = true;
     
+    this.studentsService.getStudentDetail(
+      this.activatedRoute.snapshot.params['id']
+    ).subscribe ({
+      next: (student) => {
+        this.student = student;
+        this.errorMessage = '';
+      },
+      complete: () => {
+        this.isLoading = false
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 404) {
+            this.errorMessage = 'El estudiante no existe';
+          }
+        }
+      },
+
+      
+    });
   }
 
 }

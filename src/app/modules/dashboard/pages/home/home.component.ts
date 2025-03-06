@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectAuthUserEmail } from '../../../../store/auth/auth.selectors';
 
 @Component({
   selector: 'app-home',
@@ -9,4 +12,9 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  authUserName$: Observable<string | undefined>;
+
+  constructor(private store: Store) {
+    this.authUserName$ = this.store.select(selectAuthUserEmail);
+  }
 }

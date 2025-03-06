@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './course-detail.component.scss'
 })
 export class CourseDetailComponent implements OnInit {
+  
    
     isLoading = false;
     courseId: string = '';

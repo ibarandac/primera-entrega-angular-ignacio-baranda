@@ -5,7 +5,7 @@ export const selectAuthState = createFeatureSelector<AuthState>(authFeatureKey);
 
 export const selectAuthUserEmail = createSelector(
   selectAuthState,
-  (state) => state.authUser?.email
+  (state) => state.authUser?.name
 );
 
 export const selectAuthUser = createSelector(

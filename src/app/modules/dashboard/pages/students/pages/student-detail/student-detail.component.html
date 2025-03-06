@@ -1,2 +1,7 @@
-<h2>Detalle del Estudiante {{studentId}}</h2>
-<p>{{ fullName }}</p>
+<h2>Detalle del Estudiante {{ student?.name }} {{ student?.lastName }}</h2>
+
+<p>Nombre: {{ student?.name }}</p>
+<p>Apellido: {{ student?.lastName }}</p>
+<p>Edad: {{ student?.age }}</p>
+<p>Curso Inscrito: {{ student?.course }}</p>
+<p>Id Curso: {{ student?.courseId }}</p>

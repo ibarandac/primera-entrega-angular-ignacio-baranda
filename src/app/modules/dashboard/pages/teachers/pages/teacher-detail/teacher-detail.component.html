@@ -1,2 +1,7 @@
-<h2>Detalle del Profesor {{teacherId}}</h2>
-<p>{{ fullName }}</p>
+<h2>Detalle del Profesor {{ teacher?.name }} {{ teacher?.lastName }}</h2>
+
+<p>Nombre: {{ teacher?.name }}</p>
+<p>Apellido: {{ teacher?.lastName }}</p>
+<p>Edad: {{ teacher?.age }}</p>
+<p>Curso Inscrito: {{ teacher?.course }}</p>
+<p>Id Curso: {{ teacher?.courseId }}</p>

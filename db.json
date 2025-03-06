@@ -31,7 +31,7 @@
       "name": "Gabriel",
       "lastName": "Olivares",
       "country": "Chile",
-      "accessToken": "accsstknstdnt",
+      "accessToken": "accsstknstdntol",
       "role": "STUDENT"
     }
   ],
@@ -157,6 +157,16 @@
     {
       "id": "f6da",
       "studentId": "4UgzCs",
+      "courseId": "avs3D"
+    },
+    {
+      "id": "8e64",
+      "studentId": "K2reH8",
+      "courseId": "avs3D"
+    },
+    {
+      "id": "0738",
+      "studentId": "K2reH8",
       "courseId": "avs3D"
     }
   ]

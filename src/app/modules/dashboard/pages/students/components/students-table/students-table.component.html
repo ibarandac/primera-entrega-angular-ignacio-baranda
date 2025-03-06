@@ -50,7 +50,7 @@
             <button *ngIf="isAdmin$ | async" (click)="edit.emit(element)" mat-icon-button>
                 <mat-icon>edit</mat-icon>
             </button>
-            <button  
+            <button  [routerLink]="element.id" 
             mat-icon-button>
               <mat-icon>visibility</mat-icon>
           </button>

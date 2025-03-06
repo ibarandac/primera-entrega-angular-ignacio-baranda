@@ -14,9 +14,9 @@ import { selectAuthUserEmail } from '../../../../store/auth/auth.selectors';
 export class ToolbarComponent {
   @Output() drawerToggle = new EventEmitter();
 
-  authUserEmail$: Observable<string | undefined>;
+  authUserName$: Observable<string | undefined>;
 
   constructor(private store: Store) {
-    this.authUserEmail$ = this.store.select(selectAuthUserEmail);
+    this.authUserName$ = this.store.select(selectAuthUserEmail);
   }
 }
